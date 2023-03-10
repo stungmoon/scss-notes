@@ -1,0 +1,39 @@
+@use './imports.scss' as *;
+@use 'sass:math';
+
+:root {
+    // set variables with custom colors and apply them to text and background classes
+    @each $color, $shades in $colors {
+        @each $shade, $value in $shades {
+            --clr-#{$color}-#{$shade}: #{$value};
+            .text-#{$color}-#{$shade} { color: --clr-#{$color}-#{$shade}; }
+            .bg-#{$color}-#{$shade} { background: --clr-#{$color}-#{$shade}};
+        }
+    }   
+}   
+
+body                        { background: $color-pink; color: $color-black; margin: 0; }
+header                      { @include flexcenter;
+    h1                      { position: relative; letter-spacing: 10px; text-transform: uppercase; text-shadow: 2px 2px 1px map-get($colors, tertiary, dark); color: map-get($colors, primary, light);
+        &::before           { @include absolute; @include pseudo; background: darken($color-pink, 10%); z-index: -1; height: 50%; top: unset; }
+    }
+}
+
+.grid                                                           { display: flex; flex-wrap: wrap; border: 1px solid darken($color-pink, 10%); margin: $s*4 auto; max-width: 800px; 
+    [class^=col-]                                               { @include flexcenter; height: 40px; box-shadow: 0 0 2px 2px map-get($colors, secondary, light);; }
+    @for $i from 1 through length($pinks)                       {
+        [class^=col-]:nth-child(#{length($pinks)}n+#{$i})       { background: lighten(nth($pinks, $i), 20%); }
+    }
+    @for $i from 1 through $columns                             {
+        .col-#{$i}                                              { flex: 0 0 math.div(100%, math.div($columns, $i)); }
+    }        
+}
+main                                                            { line-height: 2; font-size: 21px;
+    section                                                     { display: flex; gap: $s*4; padding: $s*4; }
+    .scheme                                                     { 
+        &-pink                                                  { @include color-scheme(map-get($colors, primary, med), map-get($colors, tertiary, light)); } 
+        &-green                                                 { @include color-scheme(map-get($colors, secondary, med), map-get($colors, tertiary, light)); }
+    }
+    @include mq(tablet)                                         { flex-wrap: nowrap; }
+}
+

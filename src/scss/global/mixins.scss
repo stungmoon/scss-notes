@@ -1,0 +1,41 @@
+@use 'sass:map';
+@use '../global/variables.scss' as *;
+
+@mixin flexcenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin absolute {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+@mixin pseudo {
+    display: block;
+    content: "";
+}
+
+@mixin absolutecenter {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+    
+@mixin mq($key) {
+    $size: map.get($breakpoints, $key);
+    @media (min-width: $size) {
+        @content;
+    }
+}
+
+@mixin color-scheme($text, $bg) {
+    color: $text;
+    background: $bg;
+}
